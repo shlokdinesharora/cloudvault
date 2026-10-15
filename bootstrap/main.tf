@@ -54,8 +54,18 @@ resource "aws_iam_role" "deploy" {
       Principal = { Federated = aws_iam_openid_connect_provider.github.arn }
       Action    = "sts:AssumeRoleWithWebIdentity"
       Condition = {
-        StringEquals = { "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com" }
-        StringLike   = { "token.actions.githubusercontent.com:sub" = "repo:${var.github_repo}:*" }
+        StringEquals = {
+          "token.actions.githubusercontent.com:aud" = "sts.amazonaws.com"
+        }
+        # GitHub repos created after 2026-07-15 send an "immutable" subject with numeric IDs:
+        #   repo:<owner>@<owner_id>/<repo>@<repo_id>:ref:refs/heads/main
+        # Older repos send repo:<owner>/<repo>:ref:... so both forms are accepted (main branch only).
+        StringLike = {
+          "token.actions.githubusercontent.com:sub" = [
+            "repo:${var.github_repo}:ref:refs/heads/main",
+            "repo:${split("/", var.github_repo)[0]}@*/${split("/", var.github_repo)[1]}@*:ref:refs/heads/main",
+          ]
+        }
       }
     }]
   })
