@@ -1,0 +1,30 @@
+:root { --bg:#f4f6fb; --card:#fff; --ink:#1b2430; --muted:#6b7686; --brand:#3b6cf6; --line:#e3e8f0; --bad:#d6336c; --ok:#2b9348; }
+@media (prefers-color-scheme: dark) { :root { --bg:#10151d; --card:#19202b; --ink:#e8edf5; --muted:#8c98aa; --line:#2a3342; } }
+* { box-sizing: border-box }
+body { margin:0; font:15px/1.5 system-ui,sans-serif; background:var(--bg); color:var(--ink) }
+h1 { margin:0 0 4px; font-size:22px } h2 { margin:8px 0 } h3 { margin:16px 0 6px }
+.page { max-width:1000px; margin:0 auto; padding:20px }
+header { display:flex; justify-content:space-between; align-items:center; margin-bottom:16px }
+.center { min-height:100vh; display:grid; place-items:center; padding:16px }
+.card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px; margin-bottom:16px }
+.narrow { width:100%; max-width:380px; display:flex; flex-direction:column; gap:10px }
+input, select { width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--ink); font:inherit }
+button { padding:8px 14px; border:0; border-radius:8px; background:var(--brand); color:#fff; font:inherit; cursor:pointer }
+button:disabled { opacity:.6 } button.ghost { background:transparent; color:var(--brand); border:1px solid var(--line) }
+button.danger { background:transparent; color:var(--bad); border:1px solid var(--line) }
+.muted { color:var(--muted) } .small { font-size:13px } .error { color:var(--bad); margin:4px 0 } .warn { color:#b7791f }
+.drop { text-align:center; border-style:dashed; cursor:pointer }
+.search { margin-bottom:12px }
+table { width:100%; border-collapse:collapse } th, td { text-align:left; padding:9px 8px; border-bottom:1px solid var(--line); vertical-align:top }
+.actions { white-space:nowrap; text-align:right } .actions button { margin-left:6px; padding:5px 10px }
+.badge { padding:2px 9px; border-radius:99px; font-size:12px; background:var(--line) }
+.badge.DONE { background:#d3f9d8; color:#1c6b30 } .badge.PROCESSING, .badge.PENDING_UPLOAD { background:#fff3bf; color:#8a6d00 }
+.badge.FAILED, .badge.QUARANTINED, .badge.BLOCKED { background:#ffdeeb; color:#a61e4d }
+.bar { display:grid; grid-template-columns:1fr 2fr 40px; gap:8px; align-items:center; margin-top:8px; font-size:13px }
+.bar div { height:8px; background:var(--line); border-radius:4px; overflow:hidden } .bar i { display:block; height:100%; background:var(--brand) }
+.overlay { position:fixed; inset:0; background:#0008; display:grid; place-items:center; padding:12px }
+.modal { width:100%; max-width:560px; max-height:90vh; overflow:auto; display:flex; flex-direction:column; gap:10px }
+.row { display:grid; grid-template-columns:1fr 1fr; gap:10px } label { font-size:13px; color:var(--muted) }
+.share { display:grid; grid-template-columns:1fr auto auto; gap:6px; align-items:center; border-top:1px solid var(--line); padding-top:8px }
+.share span { grid-column:1 / -1; order:3 }
+@media (max-width:640px) { th:nth-child(4), td:nth-child(4) { display:none } }

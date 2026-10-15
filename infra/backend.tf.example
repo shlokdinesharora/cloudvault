@@ -1,0 +1,8 @@
+# CI copies this to backend.tf and passes bucket/key/region via -backend-config.
+# For local experiments just don't create backend.tf (state stays local).
+terraform {
+  backend "s3" {
+    use_lockfile = true # needs Terraform >= 1.10
+    encrypt      = true
+  }
+}

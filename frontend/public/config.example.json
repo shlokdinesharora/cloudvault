@@ -1,0 +1,5 @@
+{
+  "region": "ap-south-1",
+  "apiUrl": "https://xxxx.execute-api.ap-south-1.amazonaws.com",
+  "clientId": "your-user-pool-client-id"
+}

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.terraform/
+*.tfstate*
+infra/.build/
+infra/backend.tf
+infra/*.tfvars
+frontend/public/config.json
+__pycache__/
+.pytest_cache/
