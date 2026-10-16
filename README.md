@@ -49,7 +49,10 @@ aws s3 sync dist s3://$(terraform -chdir=../infra output -raw frontend_bucket) -
 `pip install -r backend/requirements-dev.txt && python -m pytest backend/tests`
 
 ### Tear down (stops all cost)
-`cd infra && terraform destroy -var alert_email=you@example.com`
+From GitHub: Actions -> **Destroy** -> Run workflow -> type `destroy`. Or locally:
+```bash
+cd infra && terraform destroy -var alert_email=you@example.com
+```
 
 ## API
 | Route | Auth | Purpose |
@@ -78,4 +81,4 @@ aws s3 sync dist s3://$(terraform -chdir=../infra output -raw frontend_bucket) -
 - Notifications go to the SNS topic subscribers (the team email). Per-user email would need SES with a verified domain.
 - Thumbnails need a Pillow Lambda layer: build one for Python 3.12 / x86_64 and pass `-var pillow_layer_arn=...`.
 - Files stuck in `PENDING_UPLOAD` (never uploaded) are not auto-expired yet.
-- Terraform here was syntax-checked but not applied in the authoring environment; run `terraform validate` and a first `apply` yourself and fix any region/quota surprises.
+- Deployed to AWS (ap-south-1) through the GitHub Actions pipeline and tested on the live environment; the Destroy workflow tears everything down.

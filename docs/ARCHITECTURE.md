@@ -27,7 +27,7 @@ flowchart LR
 1. SPA calls `POST /files/upload-url` -> API records the file (`PENDING_UPLOAD`) and returns a presigned POST limited to the declared content type and 100 MB.
 2. Browser uploads straight to S3 (no server in the data path).
 3. S3 `ObjectCreated` under `uploads/` enqueues a message in SQS.
-4. The processor Lambda (up to 10 concurrent, batches of 5) streams the object once: SHA-256, magic-byte type detection, EICAR/executable rejection, text extraction for search, gzip copy. Optional thumbnail if the Pillow layer is attached.
+4. The processor Lambda (up to 10 concurrent, one file per invocation, 300 s timeout) streams the object once: SHA-256, magic-byte type detection, EICAR/executable rejection, text extraction for search, gzip copy. Optional thumbnail if the Pillow layer is attached.
 5. DynamoDB status moves `PROCESSING -> DONE` (or `QUARANTINED`/`BLOCKED`). After 3 failed receives the message goes to the DLQ, the file becomes `FAILED`, an alarm fires and SNS emails the team.
 
 ## Sharing flow
@@ -44,4 +44,4 @@ flowchart LR
 | OIDC role for CI | No long-lived AWS keys in GitHub |
 
 ## Security notes
-S3 buckets are fully private (public-access block, SSE-S3, versioning). Frontend bucket is reachable only via CloudFront OAC. IAM roles are per-function and scoped to their resources. Filenames are sanitised and keys are namespaced by the Cognito `sub`, so users cannot reach each other's objects. The deploy role in `bootstrap/` is AdministratorAccess for convenience; tighten it for real use.
+S3 buckets are fully private (public-access block, SSE-S3, versioning). The frontend bucket is private and reachable only via CloudFront (origin access control). IAM roles are per-function and scoped to their resources. CORS on the files bucket and API is limited to the CloudFront site (plus localhost for dev). Filenames are sanitised and keys are namespaced by the Cognito `sub`, so users cannot reach each other's objects. The deploy role in `bootstrap/` can only be assumed by workflows on the `main` branch of the configured repo, but it is still AdministratorAccess for convenience; tighten it for real use.
